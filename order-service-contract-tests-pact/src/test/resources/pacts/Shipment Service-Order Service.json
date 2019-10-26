@@ -1,0 +1,109 @@
+{
+  "consumer": {
+    "name": "Shipment Service"
+  },
+  "provider": {
+    "name": "Order Service"
+  },
+  "messages": [
+    {
+      "description": "an Order confirmation message",
+      "metaData": {
+        "contentType": "application/json"
+      },
+      "contents": {
+        "zip": "string",
+        "country": "string",
+        "amount": 100,
+        "orderId": "e2490de5-5bd3-43d5-b7c4-526e33f71304",
+        "city": "string",
+        "paymentId": "e2490de5-5bd3-43d5-b7c4-526e33f71304",
+        "street": "string",
+        "state": "string"
+      },
+      "providerStates": [
+        {
+          "name": "default"
+        }
+      ],
+      "matchingRules": {
+        "body": {
+          "$.orderId": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.paymentId": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.amount": {
+            "matchers": [
+              {
+                "match": "decimal"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.street": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.city": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.state": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.zip": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.country": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "4.0.0"
+    }
+  }
+}

@@ -1,0 +1,120 @@
+openapi: 3.0.1
+info:
+  title: Payment Service
+  description: Payment Service APIs
+  contact:
+    name: Payment Service team
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1-SNAPSHOT
+paths:
+  /payments:
+    post:
+      tags:
+      - payment
+      description: Process payment
+      operationId: process
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        201:
+          description: Payment processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatus'
+        400:
+          description: Payment verification failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  schemas:
+    PaymentStatus:
+      required:
+      - id
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - ACCEPTED
+          - REJECTED
+        reason:
+          type: string
+    Problem:
+      type: object
+      properties:
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+        detail:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusType'
+        title:
+          type: string
+    StatusType:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        reasonPhrase:
+          type: string
+    CreditCard:
+      required:
+      - ccv
+      - expiration
+      - holder
+      type: object
+      properties:
+        number:
+          type: string
+        holder:
+          type: string
+        expiration:
+          pattern: \d\d/\d\d
+          type: string
+        ccv:
+          maxLength: 3
+          minLength: 3
+          type: string
+    PaymentRequest:
+      required:
+      - amount
+      - creditCard
+      - orderId
+      - timestamp
+      - notes
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        amount:
+          type: number
+        creditCard:
+          $ref: '#/components/schemas/CreditCard'
+        notes:
+          type: string
+  

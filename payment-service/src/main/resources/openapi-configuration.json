@@ -1,0 +1,20 @@
+{
+    "resourcePackages": [
+        "com.example.payment.web"
+    ],
+    "prettyPrint" : true,
+    "openAPI": {
+        "info": {
+            "version": "0.0.1-SNAPSHOT",
+            "title": "Payment Service",
+            "description": "Payment Service APIs",
+            "contact": {
+                "name": "Payment Service team"
+            },
+            "license": {
+                "name": "Apache 2.0",
+                "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            }
+        }
+    }
+}

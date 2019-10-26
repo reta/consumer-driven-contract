@@ -1,0 +1,12 @@
+logging:
+  level:
+    ROOT: INFO
+    
+server:
+  port: 19001
+
+spring:
+  application:
+    name: payment-service
+  main:
+    web-application-type: servlet 

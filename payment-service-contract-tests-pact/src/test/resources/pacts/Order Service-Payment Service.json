@@ -1,0 +1,348 @@
+{
+    "provider": {
+        "name": "Payment Service"
+    },
+    "consumer": {
+        "name": "Order Service"
+    },
+    "interactions": [
+        {
+            "description": "POST new payment",
+            "request": {
+                "method": "POST",
+                "path": "/payments",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "amount": 100,
+                    "creditCard": {
+                        "ccv": "111",
+                        "expiration": "10/22",
+                        "holder": "string",
+                        "number": "string"
+                    },
+                    "orderId": "e2490de5-5bd3-43d5-b7c4-526e33f71304",
+                    "timestamp": "2000-01-31T08:00:00.000-05:00"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.orderId": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.amount": {
+                            "matchers": [
+                                {
+                                    "match": "decimal"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.timestamp": {
+                            "matchers": [
+                                {
+                                    "match": "timestamp",
+                                    "timestamp": "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.number": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.holder": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.expiration": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "\\d{2}/\\d{2}"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.ccv": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "\\d{3}"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "path": {
+                        
+                    },
+                    "header": {
+                        
+                    }
+                },
+                "generators": {
+                    "body": {
+                        "$.orderId": {
+                            "type": "Uuid"
+                        },
+                        "$.amount": {
+                            "type": "RandomDecimal",
+                            "digits": 10
+                        },
+                        "$.timestamp": {
+                            "type": "DateTime",
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+                        },
+                        "$.creditCard.number": {
+                            "type": "RandomString",
+                            "size": 20
+                        },
+                        "$.creditCard.holder": {
+                            "type": "RandomString",
+                            "size": 20
+                        }
+                    }
+                }
+            },
+            "response": {
+                "status": 201,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "id": "e2d548c5-e1bf-407f-aed4-c973dc753e3e",
+                    "status": "ACCEPTED"
+                },
+                "matchingRules": {
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "body": {
+                        "$.id": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.status": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "default"
+                }
+            ]
+        },
+        {
+            "description": "POST failed payment",
+            "request": {
+                "method": "POST",
+                "path": "/payments",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "amount": 100,
+                    "creditCard": {
+                        "ccv": "111",
+                        "expiration": "10/22",
+                        "holder": "string",
+                        "number": "string"
+                    },
+                    "orderId": "e2490de5-5bd3-43d5-b7c4-526e33f71304",
+                    "timestamp": "2000-01-31T08:00:00.000-05:00"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.amount": {
+                            "matchers": [
+                                {
+                                    "match": "decimal"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.ccv": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "\\d{3}"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.expiration": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "\\d{2}/\\d{2}"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.holder": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.creditCard.number": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.orderId": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.timestamp": {
+                            "matchers": [
+                                {
+                                    "match": "timestamp",
+                                    "timestamp": "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "header": {
+                        
+                    },
+                    "path": {
+                        
+                    }
+                },
+                "generators": {
+                    "body": {
+                        "$.amount": {
+                            "type": "RandomDecimal",
+                            "digits": 10
+                        },
+                        "$.creditCard.holder": {
+                            "type": "RandomString",
+                            "size": 20
+                        },
+                        "$.creditCard.number": {
+                            "type": "RandomString",
+                            "size": 20
+                        },
+                        "$.orderId": {
+                            "type": "Uuid"
+                        },
+                        "$.timestamp": {
+                            "type": "DateTime",
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+                        }
+                    }
+                }
+            },
+            "response": {
+                "status": 400,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "detail": "error detail",
+                    "instance": "error",
+                    "type": "http://error"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.detail": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.instance": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.type": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "failure"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.20"
+        }
+    }
+}

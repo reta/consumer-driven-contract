@@ -1,0 +1,15 @@
+logging:
+  level:
+    ROOT: INFO
+    
+server:
+  port: 19000
+  servlet:
+    context-path: /services
+
+spring:
+  application:
+    name: order-service
+  main:
+    web-application-type: servlet
+    
